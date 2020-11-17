@@ -1,0 +1,22 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl: 
+    manifests:
+      - infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: shehriyar027/auth
+      context: auth            
+      docker:
+        dockerfile: dockerfile
+      sync:
+        manual:
+          - 
+
+
+# Context: Folder that contains the image
+# artifacts: All the things that are going to be build
+# local: push: false => Don't push the image to docker hub after building

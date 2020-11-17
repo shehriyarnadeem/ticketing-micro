@@ -1,0 +1,32 @@
+apiVersion: skaffold/v2beta5
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: shehriyar027/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.js"
+            dest: .
+ 
+
+
+# Context: Folder that contains the image
+# artifacts: All the things that are going to be build
+# local: push: false => Don't push the image to docker hub after building
+# image: List out the image that is going to be produced in auth project
+# docker : Docker file to use
+#sync: Tells skaffold how to change any file when it changes
+# sync: manual: src =>  watch all the files inside the src directory 
+# 'src/**/*.ts': find all the files inside src directory with the type .ts
+# dest: dest means where to sync the changed file in the running container
+# dest . : . means take from where the file was found from and throw inside the running container
+
