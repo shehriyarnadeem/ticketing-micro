@@ -22,49 +22,49 @@ router.post(
     res: express.Response,
     next: express.NextFunction
   ) => {
-    console.log('123');
-    //   // const errors = validationResult(req);
-    //   // if (errors.array().length > 0) {
-    //   //   // If this was  is javascript land (not ts)
-    //   //   // Ts would not allow error.reasons as reasons is not a Error property
-    //   //   // const error  = new Error('Invalid email or pasword');
-    //   //   // error.reasons  = errors.array();
-    //   //   // throw error;
 
-    //   //   // If using (ts) we made subclass of Error called RequestValidationError
-    //   //   // For clearity purpose and assigned ValidationError property to error inside that class
-    //   //   next(new RequestValidationError(errors.array()));
-    //   // }
-    //   const { email, password } = req.body;
-    //   try {
-    //     const checkExisting = await User.findOne({ email });
-    //     if (checkExisting) {
-    //       console.log('User already exists');
-    //       next(new BadRequestError('User already exists'));
-    //     }
+    // const errors = validationResult(req);
+    // if (errors.array().length > 0) {
+    //   // If this was  is javascript land (not ts)
+    //   // Ts would not allow error.reasons as reasons is not a Error property
+    //   // const error  = new Error('Invalid email or pasword');
+    //   // error.reasons  = errors.array();
+    //   // throw error;
 
-    //     const user = User.build({ email, password });
-    //     await user.save();
-
-    //     const userJwt = jwt.sign(
-    //       {
-    //         id: user.id,
-    //         email: user.email,
-    //       },
-    //       process.env.JWT_KEY! // ! tells typescript that this environment variable is defined
-    //     );
-
-    //     req.session = {
-    //       jwt: userJwt,
-    //     };
-
-    //     console.log(req.session);
-    //     res.status(201).send(user);
-    //   } catch (e) {
-    //     console.log(e.message);
-    //   }
+    //   // If using (ts) we made subclass of Error called RequestValidationError
+    //   // For clearity purpose and assigned ValidationError property to error inside that class
+    //   next(new RequestValidationError(errors.array()));
     // }
+    const { email, password } = req.body;
+    try {
+      const checkExisting = await User.findOne({ email });
+      if (checkExisting) {
+
+        next(new BadRequestError('User already exists'));
+      }
+
+      const user = User.build({ email, password });
+      await user.save();
+
+      const userJwt = jwt.sign(
+        {
+          id: user.id,
+          email: user.email,
+        },
+        process.env.JWT_KEY! // ! tells typescript that this environment variable is defined
+      );
+
+      req.session = {
+        jwt: userJwt,
+      };
+
+
+      res.status(201).send(user);
+    } catch (e) {
+      console.log(e.message);
+    }
   }
+
 );
 
 export { router as signUpRouter };

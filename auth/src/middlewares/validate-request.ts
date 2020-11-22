@@ -7,7 +7,9 @@ export const validateRequest = (
   res: Response,
   next: NextFunction
 ) => {
+  
   const errors = validationResult(req);
+  
   if (!errors.isEmpty()) {
     next(new RequestValidationError(errors.array()));
   }

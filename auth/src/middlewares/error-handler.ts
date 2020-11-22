@@ -22,14 +22,15 @@ export const errorHandler = (
   // }
 
   if (err instanceof CustomError) {
-    console.log("Handle this error as a request validation error");
+
 
     //Before moving logic into RequestValidationError
     // const formattedErrors = err.errors.map((error) => {
     //   return { message: error.msg, field: error.param };
     // return res.status(400).send({ errors: formattedErrors });
     // });
-    return res.status(err.statusCode).send({ errors: err.serializeErrors() });
+
+    res.status(err.statusCode).send({ errors: err.serializeErrors() });
   }
 
   // Not required now since we have created the CustomError abstract class
